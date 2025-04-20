@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on DarknessE1</title>
+    <link>/tags/linux/</link>
+    <description>Recent content in Linux on DarknessE1</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; 2025 DarknessE1</copyright>
+    <lastBuildDate>Wed, 26 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cap Writeup - HackTheBox</title>
+      <link>/writeups/hackthebox/cap/</link>
+      <pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate>
+      
+      <guid>/writeups/hackthebox/cap/</guid>
+      <description>Cap (Linux) # Link: https://app.</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="/writeups/hackthebox/cap/feature.png" />
+    </item>
+    
+    <item>
+      <title>Sticker Shop Writeup</title>
+      <link>/writeups/tryhackme/sticker-shop/</link>
+      <pubDate>Sat, 30 Nov 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/writeups/tryhackme/sticker-shop/</guid>
+      <description>Firstly, I navigated through and found two sections: HOME and FEEDBACK.</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="/writeups/tryhackme/sticker-shop/feature.png" />
+    </item>
+    
+  </channel>
+</rss>

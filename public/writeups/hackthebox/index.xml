@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>HackTheBox on DarknessE1</title>
+    <link>/writeups/hackthebox/</link>
+    <description>Recent content in HackTheBox on DarknessE1</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>&amp;copy; 2025 DarknessE1</copyright>
+    <lastBuildDate>Wed, 26 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="/writeups/hackthebox/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cap Writeup - HackTheBox</title>
+      <link>/writeups/hackthebox/cap/</link>
+      <pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate>
+      
+      <guid>/writeups/hackthebox/cap/</guid>
+      <description>Cap (Linux) # Link: https://app.</description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="/writeups/hackthebox/cap/feature.png" />
+    </item>
+    
+  </channel>
+</rss>
